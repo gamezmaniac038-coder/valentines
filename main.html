@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Be My Valentine ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: -apple-system, Arial, sans-serif;
+  background: linear-gradient(135deg, #ffe6f0, #ffd6e7);
+  flex-direction: column;
+  text-align: center;
+  overflow: hidden;
+}
+
+h1 {
+  color: #d63384;
+  padding: 20px;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+button {
+  padding: 18px 32px;
+  font-size: 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#yesBtn {
+  background: #28a745;
+  color: white;
+}
+
+#noBtn {
+  background: #dc3545;
+  color: white;
+}
+
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  font-size: 60px !important;
+  border-radius: 0 !important;
+  z-index: 999;
+}
+
+/* floating hearts animation */
+.heart {
+  position: fixed;
+  bottom: -10px;
+  font-size: 20px;
+  animation: float 4s linear infinite;
+}
+
+@keyframes float {
+  to {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question">Will you be my Valentine? ❤️</h1>
+
+<div class="buttons">
+  <button id="yesBtn">YES 💚</button>
+  <button id="noBtn">NO 💔</button>
+</div>
+
+<!-- Background music -->
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+</audio>
+
+<script>
+let noClicks = 0;
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const question = document.getElementById("question");
+const music = document.getElementById("music");
+
+const messages = [
+  "Are you sure? 🥺",
+  "Think again… I'm cute you know 😌",
+  "Don't break my heart 💔",
+  "Last chance 😭",
+  "I will buy you food 🍔",
+  "I can cook maggi for you 🍜",
+  "Still no?? 😢",
+  "You're testing my patience 😤",
+  "Okay this is getting serious",
+  "You leave me no choice..."
+];
+
+// start music on first interaction (mobile restriction)
+document.body.addEventListener("click", () => {
+  music.play().catch(()=>{});
+}, { once: true });
+
+// YES button
+yesBtn.onclick = () => {
+  document.body.innerHTML = `
+  <h1 style="color:#d63384;padding:40px">
+  YAY!!! ❤️ See you on Valentine's 😘
+  </h1>`;
+  startHearts();
+};
+
+// NO button
+noBtn.onclick = () => {
+  noClicks++;
+
+  // change text
+  if(noClicks <= messages.length){
+    question.textContent = messages[noClicks-1];
+  }
+
+  // grow YES button
+  let scale = 1 + (noClicks * 0.5);
+  yesBtn.style.transform = scale(${scale});
+
+  // after 10 clicks takeover
+  if (noClicks >= 10) {
+    yesBtn.classList.add("fullscreen");
+    noBtn.style.display = "none";
+  }
+};
+
+// floating hearts animation
+function startHearts(){
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (20 + Math.random()*30) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 4000);
+  }, 200);
+}
+</script>
+
+</body>
+</html>
